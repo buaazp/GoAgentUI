@@ -21,6 +21,8 @@ public:
     ~MainWindow();
     int readSetting();
     int saveSetting();
+    void autoStart();
+    int startRun();
     
 private slots:
     void on_btOpen_clicked();
@@ -42,7 +44,7 @@ private:
     QString ganotfind="GoAgent not find!";
     bool bStart = false;
     QSettings *configIni;
-    QString conf="./config.ini";
+    QString conf="config.ini";
     QProcess *p;
 
     int autoRun = 0;

@@ -8,7 +8,7 @@ int main(int argc, char *argv[])
     if (app.isRunning())
     {
         app.sendMessage("raies");
-        QMessageBox::information(NULL, "Warning", "GoAgentUI is running!", QMessageBox::Ok | QMessageBox::Cancel);
+        QMessageBox::information(NULL, "Warning", "GoAgentUI is running!", QMessageBox::Ok);
         return EXIT_SUCCESS;
     }
     MainWindow w;

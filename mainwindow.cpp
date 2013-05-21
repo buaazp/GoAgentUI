@@ -7,10 +7,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     int readSet=readSetting();
     ui->setupUi(this);
-    if(autoRun>0)
-        ui->ckbAuto->setCheckState(Qt::Checked);
-    else
-        ui->ckbAuto->setCheckState(Qt::Unchecked);
+    autoStart();
 }
 
 MainWindow::~MainWindow()
@@ -19,7 +16,7 @@ MainWindow::~MainWindow()
     {
         p->kill();
     }
-    int saveRet = saveSetting();
+    //int saveRet = saveSetting();
     delete ui;
 }
 
@@ -63,32 +60,52 @@ int MainWindow::saveSetting()
     }
 }
 
+int MainWindow::startRun()
+{
+    p = new QProcess;
+    p->start(filename);
+    bStart = p->waitForStarted();
+    if(!bStart)
+    {
+        ui->lbInfo->setText(gatimeout);
+    }
+    else
+    {
+        qDebug()<<QString::fromLocal8Bit(p->readAllStandardOutput());
+        ui->lbInfo->setText(gastart);
+    }
+    if(bStart)
+        return 1;
+    else
+        return -1;
+}
+
+void MainWindow::autoStart()
+{
+    if(autoRun>0)
+        ui->ckbAuto->setCheckState(Qt::Checked);
+    else
+        ui->ckbAuto->setCheckState(Qt::Unchecked);
+    if(autoRun>0)
+    {
+        int startret = startRun();
+    }
+}
+
 void MainWindow::on_btOpen_clicked()
 {
     if(!bStart)
     {
         //QMessageBox::information(this, "Warning", "GoAgentUI is running!", QMessageBox::Ok | QMessageBox::Cancel);
-        filename = QFileDialog::getOpenFileName(
+        QString tmpFileName = QFileDialog::getOpenFileName(
                     this,
                     "Open Proxy.py",
                     QDir::currentPath(),
-                    "Document files (*.py);;All files(*.*)");
-        if (!filename.isNull()) { //用户选择了文件
-            //process way
-            p = new QProcess;
-            p->start(filename);
-            bStart = p->waitForStarted();
-            if(!bStart)
-            {
-                ui->lbInfo->setText(gatimeout);
-                //ui->btQuit->setText("Start(A)");
-            }
-            else
-            {
-                qDebug()<<QString::fromLocal8Bit(p->readAllStandardOutput());
-                ui->lbInfo->setText(gastart);
-                //ui->btQuit->setText("Stop(S)");
-            }
+                    "Python files (*.py);;All files(*.*)");
+        if (!tmpFileName.isNull()) { //用户选择了文件
+            filename = tmpFileName;
+            int startret = startRun();
+            int saveRet = saveSetting();
         }
         else // 用户取消选择
             ui->lbInfo->setText(ganotfind);
@@ -117,10 +134,7 @@ void MainWindow::on_btQuit_clicked()
 void MainWindow::on_ckbAuto_stateChanged(int arg1)
 {
     autoRun = arg1;
-    if(autoRun > 0)
-        ui->lbInfo->setText("AutoRun selected.");
-    else
-        ui->lbInfo->setText("AutoRun unselect.");
+    int saveRet = saveSetting();
 }
 
 void MainWindow::on_btStart_clicked()
@@ -131,20 +145,7 @@ void MainWindow::on_btStart_clicked()
     }
     else if(QFile::exists(filename))
     {
-        p = new QProcess;
-        p->start(filename);
-        bStart = p->waitForStarted();
-        if(!bStart)
-        {
-            ui->lbInfo->setText(gatimeout);
-            //ui->btQuit->setText("Start(A)");
-        }
-        else
-        {
-            qDebug()<<QString::fromLocal8Bit(p->readAllStandardOutput());
-            ui->lbInfo->setText(gastart);
-            //ui->btQuit->setText("Stop(S)");
-        }
+        int startret = startRun();
     }
     else
     {
