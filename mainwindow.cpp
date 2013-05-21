@@ -51,11 +51,11 @@ int MainWindow::saveSetting()
     {
         configIni->setIniCodec("UTF8");
         configIni->beginGroup("Settings");
-//        QString atrun=QString::number(autoRun, 10);
-//        configIni->setValue("autoRun",atrun);
         configIni->setValue("autoRun",autoRun);
         configIni->setValue("filename",filename);
         configIni->endGroup();
+//        QString confPath = configIni->fileName();
+//        QMessageBox::information(this, "Warning", confPath, QMessageBox::Ok);
         return 1;
     }
 }
@@ -151,4 +151,10 @@ void MainWindow::on_btStart_clicked()
     {
         ui->lbInfo->setText(ganotfind);
     }
+}
+
+void MainWindow::on_lbName_linkActivated(const QString &link)
+{
+    //QMessageBox::information(this, "Warning", "buaazp!", QMessageBox::Ok);
+    QDesktopServices::openUrl(QUrl(QLatin1String(link.toLatin1().data())));
 }

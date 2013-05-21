@@ -7,6 +7,8 @@
 #include <QProcess>
 #include <QDebug>
 #include <QSettings>
+#include <QDesktopServices>
+#include <QUrl>
 
 namespace Ui {
     class MainWindow;
@@ -32,6 +34,8 @@ private slots:
     void on_ckbAuto_stateChanged(int arg1);
 
     void on_btStart_clicked();
+
+    void on_lbName_linkActivated(const QString &link);
 
 private:
     Ui::MainWindow *ui;
