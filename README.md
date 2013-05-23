@@ -18,3 +18,6 @@ contact me: zp@buaa.us <br />
 
 ### in planning:
 	auto restart after crash.
+
+### Project Homepage
+    [http://goagentui.buaa.us/](Download & Infomation http://goagentui.buaa.us/)
