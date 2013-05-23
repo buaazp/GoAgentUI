@@ -10,6 +10,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = goagentui
 TEMPLATE = app
+ICON = icon.icns
 
 
 SOURCES += main.cpp\
@@ -21,6 +22,8 @@ FORMS    += mainwindow.ui
 
 include(./qtsingleapplication/src/qtsingleapplication.pri)
 
-OTHER_FILES += win.jpg
+OTHER_FILES += win.jpg\
+        icon.ico\
+        icon.icns
 
 RC_FILE += gaui.rc
