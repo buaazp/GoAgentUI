@@ -6,11 +6,15 @@ Based on QT5 <br />
 contact me: zp@buaa.us <br />
 
 ### includes:
-	select goagent proxy.py file.
 	start/stop proxy by control.
+	check goagent running info.
+    display failed info.
+    autostart proxy.py after run.
+	select goagent proxy.py file.
 	save/read config file.
+	minisize window after start.
+    shortcut support.
+    display python output infomation.
 
 ### in planning:
-	minisize window after start.
-	check goagent running info.
 	auto restart after crash.

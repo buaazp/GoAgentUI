@@ -5,8 +5,16 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
+    int x=(QApplication::desktop()->width() - this->width())/2;
+    int y=(QApplication::desktop()->height() - this->height())/2;
     int readSet=readSetting();
     ui->setupUi(this);
+    this->move (x,y);
+    ui->txtbInfo->document()->setMaximumBlockCount(MaxLine);
+    ui->btStart->setShortcut(Qt::Key_A);
+    ui->btOpen->setShortcut(Qt::Key_O);
+    ui->btQuit->setShortcut(Qt::Key_S);
+    ui->lbInfo->setText(welcome);
     autoStart();
     autoHideWin();
 }
@@ -141,13 +149,31 @@ void MainWindow::on_btQuit_clicked()
     {
         //p->kill();
         p->close();
-        ui->lbInfo->setText(gakill);
         bStart = false;
-        //ui->btQuit->setText("Start(A)");
+        ui->lbInfo->setText(gakill);
     }
     else
     {
-        ui->lbInfo->setText(ganotrun);
+        QProcess term;
+        QStringList args =QStringList() << "-c" << psGetPid;
+        term.start("sh", args);
+        term.waitForStarted(-1);
+        term.waitForFinished(-1);
+        QString psOut = term.readAllStandardOutput();
+        int proxyPid = psOut.toInt();
+        if(proxyPid > 0)
+        {
+            QString killcmd = "kill -9 " + QString::number(proxyPid);
+            term.start(killcmd);
+            term.waitForStarted(-1);
+            term.waitForFinished(-1);
+            QString coutStr = "Process (" + QString::number(proxyPid) + ") has been killed.\nRestart goagent by pressing Start button.";
+            ui->lbInfo->setText(coutStr);
+        }
+        else
+        {
+            ui->lbInfo->setText(ganotrun);
+        }
     }
 }
 
@@ -188,17 +214,17 @@ void MainWindow::on_cbHide_stateChanged(int arg1)
 
 void MainWindow::redFromStdOut()
 {
-    ui->txtbInfo->append("<font color=green>Std OUT:</font>");
+    //ui->txtbInfo->append("<font color=green>Std OUT:</font>");
     ui->txtbInfo->append(p->readAllStandardOutput());
-    ui->txtbInfo->append("<font color=green>Std OUT End:</font>");
+    //ui->txtbInfo->append("<font color=green>Std OUT End:</font>");
 }
 void MainWindow::redFromStdErr()
 {
     QString strerr = p->readAllStandardError();
-    ui->txtbInfo->append("<font color=red>Std ERROR:</font>");
+    //ui->txtbInfo->append("<font color=red>Std ERROR:</font>");
     ui->txtbInfo->append(strerr);
-    ui->txtbInfo->append("<font color=red>Std ERROR End.</font>");
-    QString suberr, errline;
+    //ui->txtbInfo->append("<font color=red>Std ERROR End.</font>");
+    QString suberr, errline, strInfo;
     QStringList sublines;
     int index = strerr.indexOf(errflag);
     if(index >= 0)
@@ -211,7 +237,16 @@ void MainWindow::redFromStdErr()
         suberr = strerr.right(strerr.length()-index);
         sublines = suberr.split('\n');
         errline = sublines.at(0);
-        ui->lbInfo->setText(gafial + "\n" + errline);
+        index = errline.indexOf(strPortInUse);
+        if(index >= 0)
+        {
+            strInfo = gafial + " Port " + strPortInUse + "\n" + errline;
+        }
+        else
+        {
+            strInfo = gafial + "\n" + errline;
+        }
+        ui->lbInfo->setText(strInfo);
     }
 }
 void MainWindow::processError(QProcess::ProcessError error)
@@ -249,4 +284,9 @@ void MainWindow::processFinished(int exitCode,QProcess::ExitStatus exitStatus)
         //ui->lbInfo->setText(gafial);
         ui->txtbInfo->append("<font color=green>Proxy.py END.</font>");
     }
+}
+
+void MainWindow::on_txtbInfo_textChanged()
+{
+    ui->txtbInfo->moveCursor(QTextCursor::End);
 }

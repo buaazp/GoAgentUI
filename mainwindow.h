@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QDesktopWidget>
 #include <QWidget>
 #include <QFileDialog>
 #include <QMessageBox>
@@ -11,6 +12,8 @@
 #include <QDesktopServices>
 #include <QUrl>
 #include <QString>
+#include <QStringList>
+#include <QShortcut>
 
 namespace Ui {
 class MainWindow;
@@ -51,8 +54,12 @@ private slots:
 
     void processFinished(int exitCode,QProcess::ExitStatus exitStatus);
 
+    void on_txtbInfo_textChanged();
+
+
 private:
     Ui::MainWindow *ui;
+    const QString welcome="There are so many wonderful things beyond GFW.";
     const QString gainstart="GoAgent is Starting!";
     const QString gastart="GoAgent Started!";
     const QString gafial="GoAgent start Failed!";
@@ -62,6 +69,9 @@ private:
     const QString ganotrun="GoAgent is not running!";
     const QString ganotfind="GoAgent not find!";
     const QString errflag="error";
+    const QString strPortInUse="already in use";
+    const QString psGetPid="ps aux|grep proxy|grep -v grep|awk '{print $2}'";
+    const int MaxLine = 1000;
     bool bStart = false;
     bool bFinish = false;
     QSettings *configIni;

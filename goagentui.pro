@@ -19,9 +19,8 @@ HEADERS  += mainwindow.h
 
 FORMS    += mainwindow.ui
 
-RC_FILE += gaui.rc
-
 include(./qtsingleapplication/src/qtsingleapplication.pri)
 
-OTHER_FILES += \
-    win.jpg
+OTHER_FILES += win.jpg
+
+RC_FILE += gaui.rc
