@@ -59,6 +59,8 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+    const QString organization = "buaazp";
+    const QString application = "GoAgentUI";
     const QString welcome="There are so many wonderful things beyond GFW.";
     const QString gainstart="GoAgent is Starting!";
     const QString gastart="GoAgent Started!";
@@ -70,12 +72,11 @@ private:
     const QString ganotfind="GoAgent not find!";
     const QString errflag="error";
     const QString strPortInUse="already in use";
-    const QString psGetPid="ps aux|grep proxy|grep -v grep|awk '{print $2}'";
+    const QString psGetPid="ps aux|grep proxy.py|grep -v grep|awk '{print $2}'";
     const int MaxLine = 1000;
     bool bStart = false;
     bool bFinish = false;
-    QSettings *configIni;
-    const QString conf="gauiconf.ini";
+    QSettings *settings;
     QProcess *p;
 
     int autoRun = 0;

@@ -30,44 +30,54 @@ MainWindow::~MainWindow()
 
 int MainWindow::readSetting()
 {
-    if(QFile::exists(conf))
-    {
-        configIni = new QSettings(conf, QSettings::IniFormat);
-        configIni->setIniCodec("UTF8");
-        configIni->beginGroup("Settings");
-        //        QString atrun=configIni->value("autoRun").toString();
-        //        bool ok;
-        //        autoRun = atrun.toInt(&ok, 10);
-        autoRun = configIni->value("autoRun").toInt();
-        autoHide = configIni->value("autoHide").toInt();
-        filename = configIni->value("filename").toString();
-        configIni->endGroup();
-        return 1;
-    }
-    else
-    {
-        return -1;
-    }
+//    if(QFile::exists(conf))
+//    {
+//        configIni = new QSettings(conf, QSettings::IniFormat);
+//        configIni->setIniCodec("UTF8");
+//        configIni->beginGroup("Settings");
+//        //        QString atrun=configIni->value("autoRun").toString();
+//        //        bool ok;
+//        //        autoRun = atrun.toInt(&ok, 10);
+//        autoRun = configIni->value("autoRun").toInt();
+//        autoHide = configIni->value("autoHide").toInt();
+//        filename = configIni->value("filename").toString();
+//        configIni->endGroup();
+//        return 1;
+//    }
+//    else
+//    {
+//        return -1;
+//    }
+    settings = new QSettings(organization, application);
+    autoRun = settings->value("autoRun").toInt();
+    autoHide = settings->value("autoHide").toInt();
+    filename = settings->value("filename").toString();
+    return 1;
 }
 
 int MainWindow::saveSetting()
 {
-    //if(QFile::exists(conf))
-    configIni = new QSettings(conf, QSettings::IniFormat);
-    if(!configIni)
-        return -1;
-    else
-    {
-        configIni->setIniCodec("UTF8");
-        configIni->beginGroup("Settings");
-        configIni->setValue("autoRun",autoRun);
-        configIni->setValue("autoHide",autoHide);
-        configIni->setValue("filename",filename);
-        configIni->endGroup();
-        //        QString confPath = configIni->fileName();
-        //        QMessageBox::information(this, "Warning", confPath, QMessageBox::Ok);
-        return 1;
-    }
+//    //if(QFile::exists(conf))
+//    configIni = new QSettings(conf, QSettings::IniFormat);
+//    if(!configIni)
+//        return -1;
+//    else
+//    {
+//        configIni->setIniCodec("UTF8");
+//        configIni->beginGroup("Settings");
+//        configIni->setValue("autoRun",autoRun);
+//        configIni->setValue("autoHide",autoHide);
+//        configIni->setValue("filename",filename);
+//        configIni->endGroup();
+//        //        QString confPath = configIni->fileName();
+//        //        QMessageBox::information(this, "Warning", confPath, QMessageBox::Ok);
+//        return 1;
+//    }
+    settings = new QSettings(organization, application);
+    settings->setValue("autoRun",autoRun);
+    settings->setValue("autoHide",autoHide);
+    settings->setValue("filename",filename);
+    return 1;
 }
 
 int MainWindow::startRun()
@@ -85,6 +95,7 @@ int MainWindow::startRun()
         return 1;
     else
         return -1;
+//    return 1;
 }
 
 void MainWindow::autoHideWin()
